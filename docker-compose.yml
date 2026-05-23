@@ -13,6 +13,8 @@ services:
       - PORT=3008
       - TZ=${TZ:-America/Caracas}
       - API_KEY=${API_KEY}
+      - QR_PATH=${QR_PATH}
+
     volumes:
       - whatsapp_bot_sessions:/app/bot_sessions
 
