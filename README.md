@@ -23,6 +23,8 @@ Crea un archivo `.env` en la raíz del proyecto basado en `.env.example`:
 * `PORT`: Puerto en el que escucha el servidor HTTP (por defecto `3008`).
 * `TZ`: Zona horaria del servidor (ej. `America/Caracas`, `Europe/Madrid`).
 * `API_KEY`: Clave secreta que debes proveer en las cabeceras HTTP de tus peticiones (`x-api-key` o `Authorization: Bearer`).
+* `QR_PATH`: Ruta personalizada u obfuscada (ej. `/aqui-un-uuid`) para ver/escanear el código QR. Si no se provee, se expone públicamente en `/`.
+
 
 ---
 

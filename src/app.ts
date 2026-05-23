@@ -43,6 +43,40 @@ const main = async () => {
     // Añadir middleware de body-parser para interpretar JSON en Polka
     adapterProvider.server.use(json())
 
+    // Configuración de endpoint QR seguro
+    let qrPath = process.env.QR_PATH
+    if (qrPath) {
+        if (!qrPath.startsWith('/')) {
+            qrPath = '/' + qrPath
+        }
+
+        if (qrPath !== '/') {
+            // Middleware global para bloquear el acceso directo a la raíz '/'
+            adapterProvider.server.use((req: any, res: any, next: any) => {
+                if (req.path === '/' || req.url === '/') {
+                    res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' })
+                    return res.end('Acceso denegado (Forbidden).')
+                }
+                next()
+            })
+
+            // Registrar la ruta segura del QR
+            adapterProvider.server.get(
+                qrPath,
+                (req: any, res: any) => {
+                    req['bot'] = adapterProvider.globalVendorArgs.name ?? 'bot'
+                    return (adapterProvider as any).indexHome(req, res)
+                }
+            )
+            console.log(`🔒 Servidor QR protegido: expuesto únicamente en ${qrPath}`)
+        } else {
+            console.log(`⚠️ Servidor QR expuesto públicamente en la raíz (/)`)
+        }
+    } else {
+        console.log(`ℹ️ El QR está en la raíz (/). Define la variable QR_PATH en tu archivo .env para protegerlo (ej. QR_PATH=/mi-uuid-secreto)`)
+    }
+
+
     /**
      * Endpoint POST: /v1/messages
      * Recibe notificaciones y las envía a través de WhatsApp.
