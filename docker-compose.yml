@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: builderbot-whatsapp
     restart: unless-stopped
-    ports:
-      - "${PORT:-3008}:3008"
+    # ports:
+    #   - "${PORT:-3008}:3008"
     environment:
       - PORT=3008
       - TZ=${TZ:-America/Caracas}
