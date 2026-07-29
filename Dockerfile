@@ -1,16 +1,19 @@
 # Etapa 1: Construcción
 FROM node:20-alpine AS builder
 
-WORKDIR /app
+# Declarar build-args inyectados por Coolify para evitar advertencias y fallos
+ARG COOLIFY_FQDN
+ARG QR_PATH
+ARG TZ
+ARG API_KEY
 
-# Instalar herramientas de compilación para posibles módulos nativos de node
-RUN apk add --no-cache python3 make g++ git
+WORKDIR /app
 
 # Copiar archivos de dependencias
 COPY package*.json ./
 
-# Instalar todas las dependencias (incluyendo devDependencies para compilar)
-RUN npm ci
+# Instalar dependencias optimizando uso de memoria y rendimiento
+RUN npm ci --no-audit --no-fund
 
 # Copiar todo el código fuente
 COPY . .

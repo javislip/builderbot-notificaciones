@@ -28,10 +28,8 @@ const testServerFlow = addKeyword<Provider, Database>(['test server', 'test-serv
 const main = async () => {
     const adapterFlow = createFlow([testServerFlow])
     
-    // Configuración del proveedor Baileys con una versión específica de WhatsApp Web para estabilidad
-    const adapterProvider = createProvider(Provider, {
-        version: [2, 3000, 1035824857]
-    })
+    // Configuración del proveedor Baileys sin forzar versiones obsoletas de WhatsApp Web
+    const adapterProvider = createProvider(Provider)
     const adapterDB = new Database()
 
     const { handleCtx, httpServer } = await createBot({
